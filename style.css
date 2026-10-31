@@ -1,0 +1,210 @@
+/* =====================================================================
+   STYLE DE LA CALCULATRICE : thème clair, accent bleu, bouton C rouge
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. LES VARIABLES (les "réglages" du design)
+   Une variable CSS s'écrit --nom et s'utilise avec var(--nom).
+   Pour changer une couleur de toute la page, il suffit de la modifier ici.
+   --------------------------------------------------------------------- */
+:root {
+    --fond-page: #eef2f7;
+    --fond-calculatrice: #ffffff;
+    --fond-ecran: #f4f7fb;
+    --texte: #1f2a37;
+    --texte-discret: #6b7a90;
+
+    --fond-touche: #f1f4f9;
+    --fond-touche-survol: #e4e9f1;
+
+    --accent: #2563eb;               /* le bleu principal */
+    --accent-survol: #1d4ed8;        /* le bleu un peu plus foncé au survol */
+    --accent-clair: #dbe7ff;         /* le bleu très clair des opérateurs */
+    --accent-clair-survol: #c7dafd;
+    --texte-sur-accent: #ffffff;
+
+    /* NOUVEAU : le rouge de la touche C */
+    --danger: #dc2626;               /* le rouge du texte */
+    --danger-clair: #fde2e2;         /* le rouge très clair du fond */
+    --danger-clair-survol: #fbcaca;
+
+    --rayon: 16px;                   /* l'arrondi des coins */
+    --ombre: 0 20px 40px rgba(31, 42, 55, 0.12);
+}
+
+/* ---------------------------------------------------------------------
+   2. RÉGLAGES GÉNÉRAUX
+   --------------------------------------------------------------------- */
+
+/* box-sizing: border-box : le padding et les bordures sont INCLUS dans la largeur
+   d'un élément. Sans ça, une boîte de 300px avec 20px de padding ferait 340px. */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;               /* au moins la hauteur de la fenêtre */
+    display: flex;                   /* on centre la calculatrice... */
+    justify-content: center;         /* ...horizontalement */
+    align-items: center;             /* ...et verticalement */
+    padding: 16px;
+    background-color: var(--fond-page);
+    color: var(--texte);
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+}
+
+/* ---------------------------------------------------------------------
+   3. LA CALCULATRICE (la carte blanche)
+   --------------------------------------------------------------------- */
+.calculatrice {
+    width: 100%;                     /* prend toute la largeur disponible... */
+    max-width: 340px;                /* ...mais jamais plus de 340px */
+    padding: 20px;
+    background-color: var(--fond-calculatrice);
+    border-radius: 24px;
+    box-shadow: var(--ombre);
+}
+
+/* ---------------------------------------------------------------------
+   4. L'ÉCRAN
+   --------------------------------------------------------------------- */
+.ecran {
+    display: flex;
+    flex-direction: column;          /* les deux lignes sont empilées */
+    justify-content: flex-end;       /* collées en bas de l'écran */
+    min-height: 110px;               /* hauteur fixe : l'écran ne "saute" pas */
+    margin-bottom: 16px;
+    padding: 14px 18px;
+    background-color: var(--fond-ecran);
+    border-radius: var(--rayon);
+    text-align: right;
+}
+
+/* Ligne du haut : l'expression en petit, en gris */
+.ecran__operation {
+    min-height: 1.4em;               /* garde la place même quand elle est vide */
+    font-size: 0.95rem;
+    color: var(--texte-discret);
+    overflow-wrap: anywhere;         /* une longue expression passe à la ligne au lieu de déborder */
+}
+
+/* Ligne du bas : le nombre en grand */
+.ecran__valeur {
+    font-size: 2.6rem;
+    font-weight: 600;
+    line-height: 1.1;
+    overflow-wrap: anywhere;         /* un long texte (une erreur) passe à la ligne */
+}
+
+/* Classe ajoutée par JavaScript quand le texte est long : on réduit la taille */
+.ecran__valeur.long {
+    font-size: 1.6rem;
+}
+
+/* ---------------------------------------------------------------------
+   5. LA GRILLE DES TOUCHES
+   --------------------------------------------------------------------- */
+.touches {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);   /* 4 colonnes de largeur égale */
+    gap: 10px;                                /* espace entre les touches */
+}
+
+/* ---------------------------------------------------------------------
+   6. LES TOUCHES
+   --------------------------------------------------------------------- */
+
+/* Style commun à toutes les touches */
+.touche {
+    height: 64px;
+    padding: 0;
+    border: none;                    /* on retire la bordure par défaut */
+    border-radius: var(--rayon);
+    background-color: var(--fond-touche);
+    color: var(--texte);
+    font-family: inherit;            /* reprend la police du body (les boutons ont la leur par défaut) */
+    font-size: 1.4rem;
+    font-weight: 500;
+    cursor: pointer;
+    /* transition : les changements de couleur et de taille sont progressifs */
+    transition: background-color 0.15s, transform 0.1s;
+}
+
+/* Quand la souris passe dessus */
+.touche:hover {
+    background-color: var(--fond-touche-survol);
+}
+
+/* Pendant le clic : la touche rétrécit légèrement, comme si on l'enfonçait */
+.touche:active {
+    transform: scale(0.95);
+}
+
+/* Contour bleu visible quand on navigue au clavier (touche Tab) */
+.touche:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Les opérateurs : fond bleu clair, texte bleu */
+.touche--operateur {
+    background-color: var(--accent-clair);
+    color: var(--accent);
+}
+
+.touche--operateur:hover {
+    background-color: var(--accent-clair-survol);
+}
+
+/* C, ⌫ et % : texte bleu sur fond neutre */
+.touche--action {
+    color: var(--accent);
+}
+
+/* NOUVEAU : la touche C en rouge.
+   Cette règle est placée APRÈS .touche--action : à force égale, c'est la dernière
+   règle écrite qui gagne, donc le rouge remplace le bleu. */
+.touche--danger {
+    background-color: var(--danger-clair);
+    color: var(--danger);
+}
+
+.touche--danger:hover {
+    background-color: var(--danger-clair-survol);
+}
+
+/* Le "=" : bleu plein (il a maintenant sa case normale, en bas à droite) */
+.touche--egal {
+    background-color: var(--accent);
+    color: var(--texte-sur-accent);
+}
+
+.touche--egal:hover {
+    background-color: var(--accent-survol);
+}
+
+/* Le 0 : il occupe DEUX colonnes */
+.touche--zero {
+    grid-column: span 2;
+}
+
+/* ---------------------------------------------------------------------
+   7. PETITS ÉCRANS (téléphones)
+   Ces règles ne s'appliquent que si la fenêtre fait 400px de large ou moins.
+   --------------------------------------------------------------------- */
+@media (max-width: 400px) {
+    .calculatrice {
+        padding: 14px;
+        border-radius: 18px;
+    }
+
+    .touche {
+        height: 56px;
+        font-size: 1.25rem;
+    }
+
+    .ecran__valeur {
+        font-size: 2.2rem;
+    }
+}

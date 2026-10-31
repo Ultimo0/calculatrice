@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- Encodage : permet d'afficher correctement les accents et les symboles (÷ × −) -->
+    <meta charset="UTF-8">
+
+    <!-- Adapte la page à la largeur des téléphones -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Calculatrice</title>
+
+    <!-- Charge le fichier de style -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- <main> : le contenu principal de la page.
+         aria-label donne un nom à cette zone pour les lecteurs d'écran. -->
+    <main class="calculatrice" aria-label="Calculatrice">
+
+        <!-- L'ÉCRAN : deux lignes.
+             aria-live="polite" : un lecteur d'écran annonce les changements d'affichage. -->
+        <div class="ecran" aria-live="polite">
+            <!-- Ligne du haut : l'expression en cours (ex : "2 + 3 ×"). Remplie par JavaScript. -->
+            <div id="operation" class="ecran__operation"></div>
+            <!-- Ligne du bas : le nombre affiché. -->
+            <div id="ecran" class="ecran__valeur">0</div>
+        </div>
+
+        <!-- LES TOUCHES : rangées dans une grille de 4 colonnes × 5 lignes (voir style.css).
+             Chaque bouton porte une information cachée dans un attribut "data-" :
+               data-chiffre   : le chiffre à ajouter
+               data-operateur : le signe utilisé par le programme (+ - * /)
+               data-action    : une action spéciale (effacer, retour, pourcent, point, egal)
+             Ainsi, le texte visible (÷ × −) peut être différent de ce que le programme utilise. -->
+        <div class="touches">
+
+            <!-- Ligne 1 -->
+            <!-- touche--danger : la classe qui donne la couleur rouge au bouton C -->
+            <button class="touche touche--action touche--danger" data-action="effacer">C</button>
+            <!-- aria-label : description lue par les lecteurs d'écran (un symbole seul est ambigu) -->
+            <button class="touche touche--action" data-action="retour" aria-label="Effacer le dernier chiffre">⌫</button>
+            <button class="touche touche--action" data-action="pourcent" aria-label="Pourcentage">%</button>
+            <button class="touche touche--operateur" data-operateur="/">÷</button>
+
+            <!-- Ligne 2 -->
+            <button class="touche" data-chiffre="7">7</button>
+            <button class="touche" data-chiffre="8">8</button>
+            <button class="touche" data-chiffre="9">9</button>
+            <button class="touche touche--operateur" data-operateur="*">×</button>
+
+            <!-- Ligne 3 -->
+            <button class="touche" data-chiffre="4">4</button>
+            <button class="touche" data-chiffre="5">5</button>
+            <button class="touche" data-chiffre="6">6</button>
+            <button class="touche touche--operateur" data-operateur="-">−</button>
+
+            <!-- Ligne 4 -->
+            <button class="touche" data-chiffre="1">1</button>
+            <button class="touche" data-chiffre="2">2</button>
+            <button class="touche" data-chiffre="3">3</button>
+            <button class="touche touche--operateur" data-operateur="+">+</button>
+
+            <!-- Ligne 5 : le 0 occupe deux colonnes (voir le CSS) -->
+            <button class="touche touche--zero" data-chiffre="0">0</button>
+            <button class="touche" data-action="point">.</button>
+            <button class="touche touche--egal" data-action="egal">=</button>
+        </div>
+    </main>
+
+    <!-- Le script est chargé en dernier, une fois que toute la page existe -->
+    <script src="calculatrice.js"></script>
+</body>
+</html>
